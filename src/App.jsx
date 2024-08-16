@@ -28,10 +28,14 @@ function App() {
   }, []);
 
   return !loading ? (
-    <div className="min-h-screen flex flex-wrap content-between bg-lime-300">
-      <div className="w-full block">
+    <div
+      className="relative min-h-screen flex flex-col bg-no-repeat bg-fixed bg-cover bg-center bg-black bg-opacity-75"
+      style={{ backgroundImage: "url('/bg-img-2.jpg')" }}
+    >
+      <div className="absolute inset-0 bg-black bg-opacity-50 z-0" />
+      <div className="relative z-10 flex flex-col min-h-screen">
         <Header />
-        <main>
+        <main className="flex-grow">
           <Outlet />
         </main>
         <Footer />

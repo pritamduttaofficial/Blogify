@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import databaseService from "../../appwrite/configuration.js";
 import { useForm } from "react-hook-form";
 import Button from "../Button";
@@ -7,11 +7,13 @@ import Select from "../Select";
 import RTE from "../RTE";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { ClipLoader } from "react-spinners";
 
 // In two situations the user will actually use this form component:-
 // 1. The update the existing post:- need to pass the default values from database
 // 2. To create a new post:- no default value is required
 function PostForm({ post }) {
+  const [loading, setLoading] = useState(false);
   const { register, handleSubmit, watch, setValue, getValues, control } =
     useForm({
       defaultValues: {
@@ -27,6 +29,7 @@ function PostForm({ post }) {
 
   // handling form submit
   const handleFormSubmit = async (data) => {
+    setLoading(true);
     // handle update post first
     if (post) {
       // upload the image if it is present in `data`
@@ -48,6 +51,7 @@ function PostForm({ post }) {
       // after post updation navigate the user to the updated post page
       if (updatedPost) {
         navigate(`/post/${updatedPost.$id}`);
+        setLoading(false);
       }
     } else {
       // handle new post creation
@@ -66,6 +70,7 @@ function PostForm({ post }) {
 
         if (newPost) {
           navigate(`/post/${newPost.$id}`);
+          setLoading(false);
         }
       }
     }
@@ -97,18 +102,21 @@ function PostForm({ post }) {
   }, [watch, slugTransform, setValue]);
 
   return (
-    <form onSubmit={handleSubmit(handleFormSubmit)} className="flex flex-wrap">
+    <form
+      onSubmit={handleSubmit(handleFormSubmit)}
+      className="flex flex-wrap text-white"
+    >
       <div className="w-2/3 px-2">
         <Input
           label="Title :"
           placeholder="Title"
-          className="mb-4"
+          className="mb-4 bg-zinc-800 border-zinc-500 text-white focus:text-black"
           {...register("title", { required: true })}
         />
         <Input
           label="Slug :"
           placeholder="Slug"
-          className="mb-4"
+          className="mb-4 bg-zinc-800 border-zinc-500 text-white focus:text-black"
           {...register("slug", { required: true })}
           onInput={(e) => {
             setValue("slug", slugTransform(e.currentTarget.value), {
@@ -127,7 +135,7 @@ function PostForm({ post }) {
         <Input
           label="Featured Image :"
           type="file"
-          className="mb-4"
+          className="mb-4 bg-zinc-800 text-white focus:text-black file:bg-zinc-600 file:text-white file:border-none border-zinc-500"
           accept="image/png, image/jpg, image/jpeg, image/gif"
           {...register("image", { required: !post })}
         />
@@ -143,15 +151,21 @@ function PostForm({ post }) {
         <Select
           options={["active", "inactive"]}
           label="Status"
-          className="mb-4"
+          className="mb-4 bg-zinc-800 text-white focus:text-black border-zinc-500"
           {...register("status", { required: true })}
         />
         <Button
           type="submit"
           bgColor={post ? "bg-green-500" : undefined}
-          className="w-full"
-          buttonText={post ? "Update" : "Post"}
+          className="w-full rounded"
+          buttonText={loading ? "Submitting..." : post ? "Update" : "Post"}
+          disabled={loading}
         />
+        {loading && (
+          <div className="flex justify-center mt-4">
+            <ClipLoader color="#FF1493" loading={loading} size={100} />
+          </div>
+        )}
       </div>
     </form>
   );

@@ -56,6 +56,25 @@ class AuthService {
       throw error;
     }
   }
+
+  async resetPassword(email) {
+    try {
+      return await this.account.createRecovery(
+        email,
+        "https://your-app.com/reset-password"
+      );
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async loginWithOAuth(provider) {
+    try {
+      return await this.account.createOAuth2Session(provider);
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 // Create a singleton instance of AuthService

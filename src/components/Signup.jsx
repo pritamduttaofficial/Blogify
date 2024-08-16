@@ -12,9 +12,11 @@ function Signup() {
   const dispatch = useDispatch();
   const [error, setError] = useState("");
   const { register, handleSubmit } = useForm();
+  const [loading, setLoading] = useState(false);
 
   const handleSignup = async (data) => {
     setError("");
+    setLoading(true);
     try {
       const session = await authService.createAccount(data);
       if (session) {
@@ -23,16 +25,18 @@ function Signup() {
           dispatch(login(userData));
         }
         navigate("/");
+        setLoading(false);
       }
     } catch (error) {
       setError(error.message);
+      setLoading(false);
     }
   };
 
   return (
     <div className="flex items-center justify-center">
       <div
-        className={`mx-auto w-full max-w-lg bg-lime-100 rounded-xl p-10 border border-black/10`}
+        className={`mx-auto w-full max-w-lg bg-zinc-800 text-white bg-opacity-50 rounded-xl p-10 border border-black/10`}
       >
         <div className="mb-2 flex justify-center">
           <span className="mb-6 flex justify-center">
@@ -42,7 +46,7 @@ function Signup() {
         <h2 className="text-center text-2xl font-bold leading-tight">
           Sign up to create account
         </h2>
-        <p className="mt-2 text-center text-base text-black/60">
+        <p className="mt-2 text-center text-base">
           Already have an account?&nbsp;
           <Link
             to="/login"
@@ -56,7 +60,8 @@ function Signup() {
         <form onSubmit={handleSubmit(handleSignup)}>
           <div className="space-y-5">
             <Input
-              label="Full Name: "
+              label="Full Name"
+              className="bg-zinc-800 border-zinc-500 text-white focus:text-black"
               placeholder="Enter your full name"
               {...register("name", {
                 required: true,
@@ -64,7 +69,8 @@ function Signup() {
             />
 
             <Input
-              label="Email: "
+              label="Email"
+              className="bg-zinc-800 border-zinc-500 text-white focus:text-black"
               placeholder="Enter your email"
               type="email"
               {...register("email", {
@@ -78,7 +84,8 @@ function Signup() {
             />
 
             <Input
-              label="Password: "
+              label="Password"
+              className="bg-zinc-800 border-zinc-500 text-white focus:text-black"
               type="password"
               placeholder="Enter your password"
               {...register("password", {
@@ -86,7 +93,13 @@ function Signup() {
               })}
             />
 
-            <Button type="submit" className="w-full" buttonText="Signup" />
+            <Button
+              type="submit"
+              className="w-full rounded flex items-center justify-center"
+              buttonText={
+                loading ? <ClipLoader color="#ffffff" size={20} /> : "Signup"
+              }
+            />
           </div>
         </form>
       </div>

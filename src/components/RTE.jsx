@@ -12,11 +12,13 @@ export default function RTE({ name, control, label, defaultValue = "" }) {
         control={control}
         render={({ field: { onChange } }) => (
           <Editor
-            apiKey={import.meta.env.TINYMCE_KEY}
+            apiKey={import.meta.env.VITE_TINYMCE_API_KEY}
             initialValue={defaultValue}
             init={{
               initialValue: defaultValue,
               height: 500,
+              skin: "oxide-dark",
+              content_css: "tinymce-5-dark",
               menubar: true,
               plugins: [
                 "image",
