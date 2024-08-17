@@ -3,6 +3,7 @@ import databaseService from "../appwrite/configuration";
 import Container from "../components/container/Container";
 import PostCard from "../components/PostCard";
 import { ClipLoader } from "react-spinners";
+import { useSelector } from "react-redux";
 
 function Home() {
   const [posts, setPosts] = useState([]);
@@ -10,20 +11,27 @@ function Home() {
   const [totalPosts, setTotalPosts] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 5;
+  const isLoggedIn = useSelector((state) => state.auth?.userData);
 
   useEffect(() => {
     setloading(true);
     const offset = (currentPage - 1) * postsPerPage;
 
     // Fetch the posts with pagination
-    databaseService.getPosts([], postsPerPage, offset).then((response) => {
-      if (response) {
-        console.log(response);
-        setPosts(response.documents);
-        setTotalPosts(response.total);
+    databaseService
+      .getPosts([], postsPerPage, offset)
+      .then((response) => {
+        if (response) {
+          console.log(response);
+          setPosts(response.documents);
+          setTotalPosts(response.total);
+          setloading(false);
+        }
+      })
+      .catch((error) => {
+        console.log("Error: ", error.message);
         setloading(false);
-      }
-    });
+      });
   }, [currentPage]); // Fetch posts again when currentPage changes
 
   const totalPages = Math.ceil(totalPosts / postsPerPage);
@@ -58,12 +66,14 @@ function Home() {
 
   if (posts.length === 0) {
     return (
-      <div className="w-full py-8 mt-4 text-center">
+      <div className="w-full py-8 mt-20 text-center">
         <Container>
           <div className="flex flex-wrap">
             <div className="p-2 w-full">
-              <h1 className="text-2xl font-bold hover:text-gray-500">
-                No posts available at the moment.
+              <h1 className="text-2xl font-bold text-white hover:text-opacity-70">
+                {isLoggedIn
+                  ? "No posts available at the moment."
+                  : "You need to be logged in to view posts."}
               </h1>
             </div>
           </div>

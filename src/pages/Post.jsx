@@ -5,7 +5,7 @@ import Container from "../components/container/Container";
 import Button from "../components/Button";
 import parse from "html-react-parser";
 import { useSelector } from "react-redux";
-import { AiFillDelete, AiFillDislike, AiFillLike } from "react-icons/ai";
+import { AiFillDelete, AiFillLike } from "react-icons/ai";
 import { ClipLoader } from "react-spinners";
 
 export default function Post() {
@@ -18,7 +18,7 @@ export default function Post() {
   const { slug } = useParams();
   const navigate = useNavigate();
 
-  const userData = useSelector((state) => state.auth.userData);
+  const userData = useSelector((state) => state.auth?.userData);
   const isAuthor = post && userData ? post.userId === userData.$id : false;
 
   useEffect(() => {

@@ -6,6 +6,7 @@ import Input from "./Input";
 import { useDispatch } from "react-redux";
 import authService from "../appwrite/auth.js";
 import { useForm } from "react-hook-form";
+import { ClipLoader } from "react-spinners";
 
 function Signup() {
   const navigate = useNavigate();
