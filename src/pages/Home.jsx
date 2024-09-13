@@ -86,11 +86,14 @@ function Home() {
     <div className="w-full py-8">
       <Container>
         <div className="flex flex-col space-y-4">
-          {posts.map((post) => (
-            <div key={post.$id} className="p-2 w-full">
-              <PostCard {...post} />
-            </div>
-          ))}
+          {posts.map(
+            (post) =>
+              post.status === "active" && (
+                <div key={post.$id} className="p-2 w-full">
+                  <PostCard {...post} />
+                </div>
+              )
+          )}
         </div>
 
         {/* Pagination Controls */}
