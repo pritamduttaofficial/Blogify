@@ -72,11 +72,13 @@ function Profile() {
             <div className="bg-gradient-to-l from-transparent to-gray-800 bg-opacity-50 py-2 px-4">
               <strong>Email:</strong> {userData.email}
             </div>
-            <Button
-              className="rounded font-medium bg-pink-600 hover:bg-pink-700"
-              buttonText="Edit Profile"
-              onClick={() => setIsEditing(true)}
-            />
+            {userData.email === "guest@gmail.com" ? null : (
+              <Button
+                className="rounded font-medium bg-pink-600 hover:bg-pink-700"
+                buttonText="Edit Profile"
+                onClick={() => setIsEditing(true)}
+              />
+            )}
           </div>
         ) : (
           <form
