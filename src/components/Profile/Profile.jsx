@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import Input from "../Input";
@@ -11,7 +11,7 @@ function Profile() {
   const userData = useSelector((state) => state.auth?.userData);
   const [loading, setLoading] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const { register, handleSubmit, setValue } = useForm({
+  const { register, handleSubmit } = useForm({
     defaultValues: {
       name: userData.name || "",
       email: userData.email || "",
@@ -51,6 +51,8 @@ function Profile() {
         );
         dispatch(updateUserData(updatedUser));
       }
+
+      setIsEditing(false);
     } catch (error) {
       console.error("Error updating profile:", error);
     } finally {

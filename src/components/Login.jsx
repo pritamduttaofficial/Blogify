@@ -15,9 +15,15 @@ function Login() {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const guestUser = {
+    email: "guest@gmail.com",
+    password: "Guest123",
+  };
 
   const handleLogin = async (data) => {
     setError("");
@@ -38,6 +44,11 @@ function Login() {
     }
   };
 
+  const handleGuestLogin = () => {
+    setValue("email", guestUser.email);
+    setValue("password", guestUser.password);
+  };
+
   return (
     <div className="flex flex-col items-center justify-center h-full">
       <div className="w-full max-w-lg bg-zinc-800 text-white bg-opacity-50 rounded-xl p-10 border border-black/10">
@@ -56,8 +67,14 @@ function Login() {
             Sign Up
           </Link>
         </p>
+        <p
+          className="text-center font-medium transition-all duration-200 hover:underline cursor-pointer text-pink-500"
+          onClick={handleGuestLogin}
+        >
+          Guest Login
+        </p>
         {error && <p className="text-red-600 mb-4">{error}</p>}
-        <form onSubmit={handleSubmit(handleLogin)} className="mt-4">
+        <form onSubmit={handleSubmit(handleLogin)} className="mt-2">
           <div className="space-y-4">
             <Input
               label="Email"
